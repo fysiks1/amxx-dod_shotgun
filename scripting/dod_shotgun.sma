@@ -702,7 +702,7 @@ has_specialwpn( id, wpnid=0, set=-1 ) {
 		else if( team == ALLIES )
 			wpnid = WEAP_BRIT;
 		else
-			wpnid = DODW_STG44;
+			wpnid = WEAP_AXIS;
 	}
 	else
 	{
