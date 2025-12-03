@@ -21,7 +21,7 @@ stock dod_is_map_british()
 #pragma semicolon 1
 
 #define PLUGIN "Shotgun Class"
-#define VERSION "1.0"
+#define VERSION "1.0.1"
 #define AUTHOR "29th.org"
 
 #define COCK_TASK	2929
