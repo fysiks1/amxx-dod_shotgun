@@ -190,6 +190,8 @@ public plugin_init() {
 	RegisterHam( Ham_Weapon_Reload, 	strings[weapon_amer], "fwd_Reload" );
 	RegisterHam( Ham_Weapon_Reload, 	strings[weapon_brit], "fwd_Reload" );
 	RegisterHam( Ham_Weapon_Reload, 	strings[weapon_axis], "fwd_Reload" );
+
+	RegisterHam(Ham_Spawn, "player", "dod_player_spawn", 1);
 	
 	register_clcmd( "cls_shotgun",	 	"clcmd_set_class" );
 	register_clcmd( strings[cls_amer],	"clcmd_class_menu" );
@@ -443,7 +445,7 @@ public clcmd_set_class( id ) {
 }
 
 public dod_player_spawn( id ) {
-	if( plugin_enabled() )
+	if( plugin_enabled() && is_user_alive(id) )
 	{
 		if( is_class(id) )
 		{
