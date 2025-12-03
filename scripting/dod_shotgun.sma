@@ -7,7 +7,12 @@
 #include <amxmisc>
 #include <dodx>
 #include <dodfun>
-#include <dod_stocks>
+// #include <dod_stocks>
+stock dod_is_map_british()
+{
+	return dod_get_map_info(MI_ALLIES_TEAM)
+}
+
 #include <fakemeta>
 #include <fakemeta_util>
 #include <fun>
