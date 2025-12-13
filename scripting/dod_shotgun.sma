@@ -21,7 +21,7 @@ stock dod_is_map_british()
 #pragma semicolon 1
 
 #define PLUGIN "Shotgun Class"
-#define VERSION "1.0.1"
+#define VERSION "1.0.2"
 #define AUTHOR "29th.org"
 
 #define COCK_TASK	2929
@@ -418,7 +418,7 @@ public fwd_SetModel( ent, const model[] ) {
 	if( plugin_enabled() )
 	{
 		new owner = pev( ent, pev_owner );
-		if( pev_valid(ent) && (owner && g_holding[owner])
+		if( pev_valid(ent) && ( (0 < owner < sizeof g_holding) && g_holding[owner] )
 		&& (equal(model, strings[w_amer]) || equal(model, strings[w_brit]) || equal(model, strings[w_axis])) )
 		{
 			engfunc( EngFunc_SetModel, ent, strings[w_specialwpn] );
