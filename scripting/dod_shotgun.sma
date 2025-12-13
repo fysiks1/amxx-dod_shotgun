@@ -7,7 +7,12 @@
 #include <amxmisc>
 #include <dodx>
 #include <dodfun>
-#include <dod_stocks>
+// #include <dod_stocks>
+stock dod_is_map_british()
+{
+	return dod_get_map_info(MI_ALLIES_TEAM)
+}
+
 #include <fakemeta>
 #include <fakemeta_util>
 #include <fun>
@@ -16,15 +21,9 @@
 #pragma semicolon 1
 
 #define PLUGIN "Shotgun Class"
-#define VERSION "1.0"
+#define VERSION "1.0.1"
 #define AUTHOR "29th.org"
 
-#define OFFSET_WPNID	91
-#define OFFSET_CLIPAMMO 108
-#define OFFSET_CLASS	366
-#define OFFSET_RCLASS	367
-#define OFFSET_SMGAMMO	56
-#define OFFSET_LINUX	4
 #define COCK_TASK	2929
 #define PEV_KEY 	pev_iuser3
 #define HUD_WPN		DODW_KAR
@@ -185,6 +184,8 @@ public plugin_init() {
 	RegisterHam( Ham_Weapon_Reload, 	strings[weapon_amer], "fwd_Reload" );
 	RegisterHam( Ham_Weapon_Reload, 	strings[weapon_brit], "fwd_Reload" );
 	RegisterHam( Ham_Weapon_Reload, 	strings[weapon_axis], "fwd_Reload" );
+
+	RegisterHam(Ham_Spawn, "player", "dod_player_spawn", 1);
 	
 	register_clcmd( "cls_shotgun",	 	"clcmd_set_class" );
 	register_clcmd( strings[cls_amer],	"clcmd_class_menu" );
@@ -438,7 +439,7 @@ public clcmd_set_class( id ) {
 }
 
 public dod_player_spawn( id ) {
-	if( plugin_enabled() )
+	if( plugin_enabled() && is_user_alive(id) )
 	{
 		if( is_class(id) )
 		{
@@ -701,7 +702,7 @@ has_specialwpn( id, wpnid=0, set=-1 ) {
 		else if( team == ALLIES )
 			wpnid = WEAP_BRIT;
 		else
-			wpnid = DODW_STG44;
+			wpnid = WEAP_AXIS;
 	}
 	else
 	{
@@ -741,8 +742,7 @@ set_class( id, set=1 ) {
 		else
 			class = CLASS_AXIS;
 			
-		set_pdata_int( id, OFFSET_CLASS, class, OFFSET_LINUX );
-		set_pdata_int( id, OFFSET_RCLASS, 0, OFFSET_LINUX ); // Make sure not on Random class
+		dod_set_user_class(id, class);
 	}
 	else
 	{
@@ -870,18 +870,18 @@ stock create_recoil( id, Float:recoil ) {
 }
 
 stock clip_ammo( id, set=-1, diff=0 ) {
-	new wpnent = dod_get_weapon_ent_by_owner( id, get_user_weapon(id) );
-	new ammo = get_pdata_int( wpnent, OFFSET_CLIPAMMO, OFFSET_LINUX );
+	new weaponId = get_user_weapon(id);
+	new ammo = dod_get_user_ammo(id, weaponId);
 	
 	if( set > -1 )
 	{
 		ammo = set;
-		set_pdata_int( wpnent, OFFSET_CLIPAMMO, ammo, OFFSET_LINUX );
+		dod_set_user_ammo(id, weaponId, ammo);
 	}
 	if( diff != 0 )
 	{
 		ammo += diff;
-		set_pdata_int( wpnent, OFFSET_CLIPAMMO, ammo, OFFSET_LINUX );
+		dod_set_user_ammo(id, weaponId, ammo);
 	}
 	return ammo;
 }
